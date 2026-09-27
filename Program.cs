@@ -1,4 +1,6 @@
 
+using MKitchen.Services;
+
 namespace MKitchen
 {
     public class Program
@@ -12,14 +14,27 @@ namespace MKitchen
             builder.Services.AddControllers();
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
+            builder.Services.AddSwaggerGen();
+
+
+            builder.Services.AddSingleton<IFridgeService, FridgeService>();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
+            //if (app.Environment.IsDevelopment())
+            //{
                 app.MapOpenApi();
-            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "MKitchen API V1");
+            });
+
+            //}
 
             app.UseHttpsRedirection();
 
